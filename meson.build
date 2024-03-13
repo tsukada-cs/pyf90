@@ -1,4 +1,4 @@
-project( 'pyfort', 'c',
+project('pyf90', 'c',
   # Note that the git commit hash cannot be added dynamically here
   version: '2.0.1',
   license: 'MIT',
@@ -39,19 +39,22 @@ message(py3.get_install_dir())
 
 incdir_numpy = run_command(py3,
   ['-c', 'import os; os.chdir(".."); import numpy; print(numpy.get_include())'],
-  check : true
+  check: true
 ).stdout().strip()
 
 incdir_f2py = run_command(py3,
   ['-c', 'import os; os.chdir(".."); from numpy import f2py; print(f2py.get_include())'],
-  check : true
+  check: true
 ).stdout().strip()
 
-myext_source = custom_target('myextmodule.c',
-  input : ['src/myext1.f90', 'src/myext2.f90'],  # .f so no F90 wrappers
-  output : ['myextmodule.c', 'myext-f2pywrappers.f'],
-  # output : ['myextmodule.c'],
-  command : [py3, '-m', 'numpy.f2py', '@INPUT@', '-m', 'myext', '--lower']
+futils_source = custom_target('futilsmodule.c',
+  input: ['src/futils/myext1.f90', 'src/futils/myext2.f90'],
+  output: [
+        'futilsmodule.c', 
+        'futils-f2pywrappers.f', 
+        # 'futils-f2pywrappers2.f90'
+      ],
+  command: [py3, '-m', 'numpy.f2py', '@INPUT@', '-m', 'futils', '--lower']
 )
 
 inc_dirs = include_directories(incdir_numpy, incdir_f2py)
@@ -63,14 +66,15 @@ is_mingw = is_windows and cc.get_id() == 'gcc'
 
 # Declare the sources
 py3.install_sources([
-  'pyfort/__init__.py'],
+  'src/pyf90/__init__.py'],
   pure: false,
-  subdir: 'pyfort')
+  subdir: 'pyf90')
 
-py3.extension_module('myext',
-  ['src/myext1.f90', 'src/myext2.f90', myext_source],
+py3.extension_module('futils',
+  ['src/futils/myext1.f90', 'src/futils/myext2.f90', futils_source],
   incdir_f2py / 'fortranobject.c',
   include_directories: inc_dirs,
-  dependencies : py3_dep,
-  install : true
+  dependencies: py3_dep,
+  install: true,
+  subdir: 'pyf90'
 )

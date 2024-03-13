@@ -2,14 +2,14 @@
 build-backend = 'mesonpy'
 requires = [
 	"wheel",
-	"meson-python>=0.8.0",
+	"meson-python>=0.15.0",
 	"setuptools<60.0",  # Do not increase, 60.0 enables vendored distutils
 	"oldest-supported-numpy; python_version>'3.9'",
 	"numpy; python_version<='3.9'"
 ]
 
 [project]
-name = "pyfort"
+name = "pyf90"
 license = {file = "LICENSE"}
 description = "A Python fortran wrapper"
 maintainers = [
