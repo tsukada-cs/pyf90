@@ -1,5 +1,5 @@
 # pyf90
-A simple demo python package that compiles a Fortran extension using meson, based on [pyf90](https://github.com/larsbuntemeyer/pyf90).
+A simple demo python package that compiles a Fortran90 extension using meson.
 
 ## References
 * `meson.build` is partly based on [aburrell/apexpy](https://github.com/aburrell/apexpy/blob/main/meson.build)
