@@ -2,6 +2,10 @@
 import pyf90
 #%%
 a = 10
+b = pyf90.pycode.python_func(a)
+assert b == 50010
+#%%
+a = 10
 b = pyf90.futils.sub1_1(a)
 assert b == 11
 # %%
@@ -14,3 +18,4 @@ b = [1,2,3]
 c = pyf90.futils.sub2_2(a, b)
 print(c)
 # %%
+

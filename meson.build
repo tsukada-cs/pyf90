@@ -65,13 +65,24 @@ is_mac = host_machine.system() == 'darwin'
 is_mingw = is_windows and cc.get_id() == 'gcc'
 
 # Declare the sources
-py3.install_sources([
-  'src/pyf90/__init__.py'],
+python_sources = [
+  'src/pyf90/__init__.py',
+  'src/pyf90/pycode.py',
+]
+py3.install_sources(
+  python_sources,
   pure: false,
   subdir: 'pyf90')
 
+
+fortran_sources = [
+  'src/futils/myext1.f90',
+  'src/futils/myext2.f90',
+  futils_source
+]
+
 py3.extension_module('futils',
-  ['src/futils/myext1.f90', 'src/futils/myext2.f90', futils_source],
+  fortran_sources,
   incdir_f2py / 'fortranobject.c',
   include_directories: inc_dirs,
   dependencies: py3_dep,
